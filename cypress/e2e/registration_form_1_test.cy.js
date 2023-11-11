@@ -16,12 +16,15 @@ Assignment 2:
  5. Add comment to the first test containing today’s date
  */
 
-describe('This is first test suite', () => {
-    it('User can submit data only when valid mandatory values are added', () => {
+describe('This is first test suite, Vitali Sapoval', () => {
+    //This is a comment to the first test. Today's date is the 4th of November
+    it('User can submit data only when valid mandatory values are added', () => {        
+        cy.get('[data-testid="phoneNumberTestId"]').type('555666777')
+        cy.get('[id="firstName"]').type('Emmet')
+        cy.get('[id="lastName"]').type('Brown')
+        cy.get('input[name="password"]').type('repl4c3m3nt_pass')
+        cy.get('[name="confirm"]').type('repl4c3m3nt_pass')
         cy.get('#username').type('Something')
-        cy.get('[data-testid="phoneNumberTestId"]').type('5656565656')
-        cy.get('input[name="password"]').type('Password123')
-        cy.get('[name="confirm"]').type('Password123')
 
         //in order to activate submit button, user has to click somewhere outside the input field
         cy.get('h2').contains('Password').click()
@@ -43,8 +46,8 @@ describe('This is first test suite', () => {
     it('User can use only same both first and validation passwords', () => {
         cy.get('#username').type('johnDoe')
         cy.get('[data-testid="phoneNumberTestId"]').type('10203040')
-        cy.get('input[name="password"]').type('Password123')
-        cy.get('[name="confirm"]').type('Password123123')
+        cy.get('input[name="password"]').type('repl4c3m3nt_pass')
+        cy.get('[name="confirm"]').type('repl4c3m3nt_pass123')
         // type('{enter}') is clicking native button e.g to click backspace use '{backspace}'
         cy.get('[name="confirm"]').type('{enter}')
 
@@ -64,8 +67,8 @@ describe('This is first test suite', () => {
     it('User cannot submit data when username is absent', () => {
         cy.get('#username').type('johnDoe')
         cy.get('[data-testid="phoneNumberTestId"]').type('10203040')
-        cy.get("input[name='password']").type('Password123')
-        cy.get('[name="confirm"]').type('Password123')
+        cy.get("input[name='password']").type('repl4c3m3nt_pass')
+        cy.get('[name="confirm"]').type('repl4c3m3nt_pass')
 
         // Scroll back to username input field
         cy.get('#username').scrollIntoView()
@@ -98,12 +101,48 @@ describe('This is first test suite', () => {
         // Add test, similar to previous one with phone number field not filled in
         // All other fields should be entered correctly
         // Assert that submit button is not enabled and that successful message is not visible
+        cy.get('#username').type('johnDoe')
+        cy.get('[id="phoneNumber"]').type('10203040')
+        cy.get("input[name='password']").type('repl4c3m3nt_pass')
+        cy.get('[name="confirm"]').type('repl4c3m3nt_pass')
+
+        // Scroll back to username input field
+        cy.get('[id="phoneNumber"]').scrollIntoView()
+        cy.get('[id="phoneNumber"]').clear()
+        cy.get('h2').contains('Password').click()
+
+        // Asserting that Submit button is disabled
+        cy.get('.submit_button').should('be.disabled')
+
+        // Assert that success message is not visible
+        cy.get('#success_message').should('not.be.visible')
+
     })
 
     it('User cannot submit data when password and/or confirmation password is absent', () => {
         // Add test, similar to previous one with password field not filled in
         // All other fields should be entered correctly
         // Assert that submit button is not enabled and that successful message is not visible
+        cy.get('#username').type('johnDoe')
+        cy.get('[data-testid="phoneNumberTestId"]').type('10203040')
+        cy.get('input[name="password"]').type('repl4c3m3nt_pass')
+        cy.get('[name="confirm"]').type('repl4c3m3nt_pass123')
+        // type('{enter}') is clicking native button e.g to click backspace use '{backspace}'
+        cy.get('[name="confirm"]').type('{enter}')
+
+        // Scroll back to password and confirm input field
+        cy.get('input[name="password"]').scrollIntoView()
+        cy.get('input[name="password"]').clear()
+        cy.get('h2').contains('Password').click()
+        cy.get('[name="confirm"]').scrollIntoView()
+        cy.get('[name="confirm"]').clear()
+        cy.get('h2').contains('Password').click()
+
+        // Assert that success message is not visible
+        cy.get('#success_message').should('not.be.visible')
+        // Asserting that Submit button is disabled
+        cy.get('.submit_button').should('be.disabled')
+
     })
 
     it('User cannot add letters to phone number', () => {
@@ -114,5 +153,19 @@ describe('This is first test suite', () => {
         // Add steps, when all fields are correctly filled in, except phone number
         // Try typing letters to phone number field
         // Assert that submit button is not enabled and that successful message is not visible
+
+        cy.get('[id="phoneNumber"]').type('abcdefghi')
+        cy.get('[id="firstName"]').type('Emmet')
+        cy.get('[id="lastName"]').type('Brown')
+        cy.get('input[name="password"]').type('repl4c3m3nt_pass')
+        cy.get('[name="confirm"]').type('repl4c3m3nt_pass')
+        cy.get('#username').type('Something')
+
+        // Assert that success message is not visible
+        cy.get('#success_message').should('not.be.visible')
+        // Asserting that Submit button is disabled
+        cy.get('.submit_button').should('be.disabled')
+
+
     })
 })
